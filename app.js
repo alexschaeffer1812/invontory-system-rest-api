@@ -15,8 +15,8 @@ app.use(express.static('./public'))
 
 
 app.get("/", (req, res) => {
-    console.log("Responding to roo route")
-    res.send("Hello from the root!")
+    console.log("Responding to root route")
+    res.send("Welcome to Alex's invontory system!")
 })
 
 const router = require('./routes/book.js')

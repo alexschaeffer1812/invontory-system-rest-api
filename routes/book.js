@@ -9,27 +9,33 @@ router.use(bodyParser.json())
 // Connect and authenticate with MySQL database
 
 // Production DB
-const connection = mysql.createConnection( {
+const pool = mysql.createPool({
+    connectionLimit: 10,
     host: 'us-cdbr-iron-east-01.cleardb.net',
     user: 'bf5561c97283cb',
     password: '1f4442b0',
     database: 'heroku_ec907147b0ec13a'
 })
 
-
 // Local DB
-// const connection = mysql.createConnection( {
+// const pool = mysql.createPool({
+//     connectionLimit: 10,
 //     host: 'localhost',
 //     user: 'root',
 //     password: 'wdph2hc!1812A',
 //     database: 'invontory_db'
 // })
 
+function getConnection() {
+    return pool
+}
+
+
 
 // Gets all books in database
 router.get("/books", (req, res) => {
     const queryString = "SELECT * FROM books"
-    connection.query(queryString, (err, rows, fields) => {
+    getConnection().query(queryString, (err, rows, fields) => {
         if (err) {
             console.log("Faild to execute query")
             res.sendStatus(500)
@@ -46,7 +52,7 @@ router.get('/books/:id', (req, res) => {
     console.log("Book id: " + req.params.id)
     const userId = req.params.id
     const queryString = "SELECT * FROM books WHERE id = ?"
-    connection.query(queryString, [userId], (err, rows, fields) => {
+    getConnection().query(queryString, [userId], (err, rows, fields) => {
         if (err) {
             console.log("Faild to execute query")
             res.sendStatus(500)
@@ -70,7 +76,7 @@ router.post('/add_book/', (req, res) => {
     const price = req.body.price
 
     const queryString = "INSERT INTO books (title, author, description, genre, isbn, instock, price) VALUES (?, ?, ?, ?, ?, ?, ?)"
-    connection.query(queryString, [title, author, description, genre, isbn, inStock, price], (err, rows, fields) => {
+    getConnection().query(queryString, [title, author, description, genre, isbn, inStock, price], (err, rows, fields) => {
         if (err) {
             console.log("Faild to add book: " + err)
             res.sendStatus(500)
@@ -95,7 +101,7 @@ router.post('/update_book/:id', (req, res) => {
     const price = req.body.price
 
     const queryString = "UPDATE invontory_db.books SET title = ?, author = ?, description = ?, genre = ?, isbn = ?, instock = ?, price = ? WHERE id = ?"
-    connection.query(queryString, [title, author, description, genre, isbn, inStock, price, req.params.id], (err, rows, fields) => {
+    getConnection().query(queryString, [title, author, description, genre, isbn, inStock, price, req.params.id], (err, rows, fields) => {
         if (err) {
             console.log("Faild to add book: " + err)
             res.sendStatus(500)
@@ -113,7 +119,7 @@ router.delete('/books/:id', (req, res) => {
     console.log("Book id: " + req.params.id)
     const userId = req.params.id
     const queryString = "DELETE FROM books WHERE id = ?"
-    connection.query(queryString, [userId], (err, rows, fields) => {
+    getConnection().query(queryString, [userId], (err, rows, fields) => {
         if (err) {
             console.log("Faild to execute query")
             res.sendStatus(500)
