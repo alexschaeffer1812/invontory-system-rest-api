@@ -20,7 +20,9 @@ app.get("/", (req, res) => {
 const router = require('./routes/book.js')
 app.use(router)
 
+const PORT = process.env.PORT || 3000
+
 // localhost:3000
-app.listen(3000, () => {
-    console.log("Console is up and listening on port 3000")
+app.listen(PORT, () => {
+    console.log("Console is up and listening on " + PORT)
 })
