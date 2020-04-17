@@ -4,12 +4,23 @@ const router = express.Router()
 const mysql = require('mysql')
 
 // Connect and authenticate with MySQL database
+
+// Production DB
 const connection = mysql.createConnection( {
-    host: 'localhost',
-    user: 'root',
-    password: 'wdph2hc!1812A',
-    database: 'invontory_db'
+    host: 'us-cdbr-iron-east-01.cleardb.net',
+    user: 'bf5561c97283cb',
+    password: '1f4442b0',
+    database: 'heroku_ec907147b0ec13a'
 })
+
+
+// Local DB
+// const connection = mysql.createConnection( {
+//     host: 'localhost',
+//     user: 'root',
+//     password: 'wdph2hc!1812A',
+//     database: 'invontory_db'
+// })
 
 
 // Gets all books in database
