@@ -2,25 +2,28 @@
 const express = require('express')
 const router = express.Router()
 const mysql = require('mysql')
+const bodyParser = require('body-parser')
+
+router.use(bodyParser.json())
 
 // Connect and authenticate with MySQL database
 
 // Production DB
-const connection = mysql.createConnection( {
-    host: 'us-cdbr-iron-east-01.cleardb.net',
-    user: 'bf5561c97283cb',
-    password: '1f4442b0',
-    database: 'heroku_ec907147b0ec13a'
-})
+// const connection = mysql.createConnection( {
+//     host: 'us-cdbr-iron-east-01.cleardb.net',
+//     user: 'bf5561c97283cb',
+//     password: '1f4442b0',
+//     database: 'heroku_ec907147b0ec13a'
+// })
 
 
 // Local DB
-// const connection = mysql.createConnection( {
-//     host: 'localhost',
-//     user: 'root',
-//     password: 'wdph2hc!1812A',
-//     database: 'invontory_db'
-// })
+const connection = mysql.createConnection( {
+    host: 'localhost',
+    user: 'root',
+    password: 'wdph2hc!1812A',
+    database: 'invontory_db'
+})
 
 
 // Gets all books in database
@@ -56,17 +59,17 @@ router.get('/books/:id', (req, res) => {
 })
 
 // Inserts book into database
-router.post('/book_add', (req, res) => {
+router.post('/add_book/', (req, res) => {
 
-    const title = req.body.add_title
-    const author = req.body.add_author
-    const description = req.body.add_description
-    const genre = req.body.add_genre
-    const isbn = req.body.add_isbn
-    const inStock = req.body.add_inStock
-    const price = req.body.add_price
+    const title = req.body.title
+    const author = req.body.author
+    const description = req.body.description
+    const genre = req.body.genre
+    const isbn = req.body.isbn
+    const inStock = req.body.inStock
+    const price = req.body.price
 
-    const queryString = "INSERT INTO books (title, author, description, genre, isbn, in_stock, price) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    const queryString = "INSERT INTO books (title, author, description, genre, isbn, instock, price) VALUES (?, ?, ?, ?, ?, ?, ?)"
     connection.query(queryString, [title, author, description, genre, isbn, inStock, price], (err, rows, fields) => {
         if (err) {
             console.log("Faild to add book: " + err)
@@ -74,8 +77,52 @@ router.post('/book_add', (req, res) => {
             return
         }
         console.log("Success")
-        res.end();
+        console.log(title)
+        res.end()
     })
+})
+
+
+// Updates book into database
+router.post('/update_book/:id', (req, res) => {
+
+    const title = req.body.title
+    const author = req.body.author
+    const description = req.body.description
+    const genre = req.body.genre
+    const isbn = req.body.isbn
+    const inStock = req.body.inStock
+    const price = req.body.price
+
+    const queryString = "UPDATE invontory_db.books SET title = ?, author = ?, description = ?, genre = ?, isbn = ?, instock = ?, price = ? WHERE id = ?"
+    connection.query(queryString, [title, author, description, genre, isbn, inStock, price, req.params.id], (err, rows, fields) => {
+        if (err) {
+            console.log("Faild to add book: " + err)
+            res.sendStatus(500)
+            return
+        }
+        console.log("Success")
+        console.log(title)
+        res.end()
+    })
+})
+
+
+// Deletes book by ID
+router.delete('/books/:id', (req, res) => {
+    console.log("Book id: " + req.params.id)
+    const userId = req.params.id
+    const queryString = "DELETE FROM books WHERE id = ?"
+    connection.query(queryString, [userId], (err, rows, fields) => {
+        if (err) {
+            console.log("Faild to execute query")
+            res.sendStatus(500)
+            return
+        }
+        console.log("Book deleted")
+        res.end()
+    })
+
 })
 
 
