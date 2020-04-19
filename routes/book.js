@@ -100,7 +100,7 @@ router.post('/update_book/:id', (req, res) => {
     const inStock = req.body.inStock
     const price = req.body.price
 
-    const queryString = "UPDATE invontory_db.books SET title = ?, author = ?, description = ?, genre = ?, isbn = ?, instock = ?, price = ? WHERE id = ?"
+    const queryString = "UPDATE books SET title = ?, author = ?, description = ?, genre = ?, isbn = ?, instock = ?, price = ? WHERE id = ?"
     getConnection().query(queryString, [title, author, description, genre, isbn, inStock, price, req.params.id], (err, rows, fields) => {
         if (err) {
             console.log("Faild to add book: " + err)
