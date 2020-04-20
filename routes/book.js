@@ -11,10 +11,10 @@ router.use(bodyParser.json())
 // Production DB
 const pool = mysql.createPool({
     connectionLimit: 10,
-    host: 'us-cdbr-iron-east-01.cleardb.net',
-    user: 'bf5561c97283cb',
-    password: '1f4442b0',
-    database: 'heroku_ec907147b0ec13a'
+    host: '<DB Host>',
+    user: '<DB User>',
+    password: '<DB Password>',
+    database: '<DB Name>'
 })
 
 // Local DB
@@ -22,8 +22,8 @@ const pool = mysql.createPool({
 //     connectionLimit: 10,
 //     host: 'localhost',
 //     user: 'root',
-//     password: 'wdph2hc!1812A',
-//     database: 'invontory_db'
+//     password: '<DB Password>',
+//     database: '<DB Name>'
 // })
 
 function getConnection() {
