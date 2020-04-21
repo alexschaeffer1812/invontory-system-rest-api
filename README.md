@@ -1,4 +1,4 @@
-# invontory-system-rest-api
+# Book Inventory System - Rest API Server
 This is a Node JS REST API server built for communication between desktop and mobile applications.
 
 # Requirements
